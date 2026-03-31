@@ -61,8 +61,9 @@ export function useHospitalsWithReadings() {
   useEffect(() => {
     fetchData();
 
+    const channelName = `o2-realtime-${Math.random().toString(36).slice(2)}`;
     const channel = supabase
-      .channel('o2-realtime')
+      .channel(channelName)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'o2_readings' }, () => {
         fetchData();
       })
