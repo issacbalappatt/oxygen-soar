@@ -1,4 +1,11 @@
+/// <reference types="google.maps" />
 import { useEffect, useRef, useState } from 'react';
+
+declare global {
+  interface Window {
+    google: typeof google;
+  }
+}
 
 interface MarkerData {
   lat: number;
