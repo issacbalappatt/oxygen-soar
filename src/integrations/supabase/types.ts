@@ -147,6 +147,50 @@ export type Database = {
         }
         Relationships: []
       }
+      facility_production: {
+        Row: {
+          created_at: string | null
+          cylinders_dispatched: number
+          cylinders_in_stock: number
+          cylinders_produced: number
+          facility_id: string
+          id: string
+          logged_by: string | null
+          notes: string | null
+          production_date: string
+        }
+        Insert: {
+          created_at?: string | null
+          cylinders_dispatched?: number
+          cylinders_in_stock?: number
+          cylinders_produced?: number
+          facility_id: string
+          id?: string
+          logged_by?: string | null
+          notes?: string | null
+          production_date?: string
+        }
+        Update: {
+          created_at?: string | null
+          cylinders_dispatched?: number
+          cylinders_in_stock?: number
+          cylinders_produced?: number
+          facility_id?: string
+          id?: string
+          logged_by?: string | null
+          notes?: string | null
+          production_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "facility_production_facility_id_fkey"
+            columns: ["facility_id"]
+            isOneToOne: false
+            referencedRelation: "facilities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hospitals: {
         Row: {
           assigned_facility_id: string | null
