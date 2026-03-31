@@ -91,8 +91,9 @@ export function useAlerts() {
   useEffect(() => {
     fetchAlerts();
 
+    const channelName = `alerts-realtime-${Math.random().toString(36).slice(2)}`;
     const channel = supabase
-      .channel('alerts-realtime')
+      .channel(channelName)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts' }, () => {
         fetchAlerts();
       })
