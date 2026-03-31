@@ -14,7 +14,391 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          alert_type: string
+          created_at: string | null
+          hospital_id: string | null
+          id: string
+          is_read: boolean | null
+          message: string
+          truck_id: string | null
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string | null
+          hospital_id?: string | null
+          id?: string
+          is_read?: boolean | null
+          message: string
+          truck_id?: string | null
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string | null
+          hospital_id?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          truck_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alerts_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alerts_truck_id_fkey"
+            columns: ["truck_id"]
+            isOneToOne: false
+            referencedRelation: "trucks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deliveries: {
+        Row: {
+          cylinders_delivered: number
+          delivered_at: string | null
+          hospital_id: string | null
+          id: string
+          level_after_pct: number | null
+          level_before_pct: number | null
+          notes: string | null
+          route_stop_id: string | null
+          truck_id: string | null
+        }
+        Insert: {
+          cylinders_delivered: number
+          delivered_at?: string | null
+          hospital_id?: string | null
+          id?: string
+          level_after_pct?: number | null
+          level_before_pct?: number | null
+          notes?: string | null
+          route_stop_id?: string | null
+          truck_id?: string | null
+        }
+        Update: {
+          cylinders_delivered?: number
+          delivered_at?: string | null
+          hospital_id?: string | null
+          id?: string
+          level_after_pct?: number | null
+          level_before_pct?: number | null
+          notes?: string | null
+          route_stop_id?: string | null
+          truck_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deliveries_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliveries_route_stop_id_fkey"
+            columns: ["route_stop_id"]
+            isOneToOne: false
+            referencedRelation: "route_stops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliveries_truck_id_fkey"
+            columns: ["truck_id"]
+            isOneToOne: false
+            referencedRelation: "trucks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      facilities: {
+        Row: {
+          created_at: string | null
+          daily_capacity: number
+          id: string
+          latitude: number | null
+          location: string
+          longitude: number | null
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          daily_capacity: number
+          id?: string
+          latitude?: number | null
+          location: string
+          longitude?: number | null
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          daily_capacity?: number
+          id?: string
+          latitude?: number | null
+          location?: string
+          longitude?: number | null
+          name?: string
+        }
+        Relationships: []
+      }
+      hospitals: {
+        Row: {
+          assigned_facility_id: string | null
+          contact_phone: string | null
+          created_at: string | null
+          critical_threshold_pct: number | null
+          cylinder_capacity: number
+          district: string
+          id: string
+          latitude: number | null
+          location: string | null
+          longitude: number | null
+          name: string
+          reorder_threshold_pct: number | null
+          total_beds: number | null
+        }
+        Insert: {
+          assigned_facility_id?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          critical_threshold_pct?: number | null
+          cylinder_capacity: number
+          district: string
+          id?: string
+          latitude?: number | null
+          location?: string | null
+          longitude?: number | null
+          name: string
+          reorder_threshold_pct?: number | null
+          total_beds?: number | null
+        }
+        Update: {
+          assigned_facility_id?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          critical_threshold_pct?: number | null
+          cylinder_capacity?: number
+          district?: string
+          id?: string
+          latitude?: number | null
+          location?: string | null
+          longitude?: number | null
+          name?: string
+          reorder_threshold_pct?: number | null
+          total_beds?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hospitals_assigned_facility_id_fkey"
+            columns: ["assigned_facility_id"]
+            isOneToOne: false
+            referencedRelation: "facilities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      o2_readings: {
+        Row: {
+          created_at: string | null
+          cylinder_capacity: number
+          cylinders_available: number
+          hospital_id: string
+          id: string
+          level_pct: number | null
+          logged_by: string | null
+          notes: string | null
+          reading_date: string
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          cylinder_capacity: number
+          cylinders_available: number
+          hospital_id: string
+          id?: string
+          level_pct?: number | null
+          logged_by?: string | null
+          notes?: string | null
+          reading_date?: string
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          cylinder_capacity?: number
+          cylinders_available?: number
+          hospital_id?: string
+          id?: string
+          level_pct?: number | null
+          logged_by?: string | null
+          notes?: string | null
+          reading_date?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "o2_readings_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      route_stops: {
+        Row: {
+          actual_delivery_time: string | null
+          created_at: string | null
+          cylinders_to_deliver: number
+          eta: string | null
+          hospital_id: string
+          id: string
+          route_id: string
+          status: string | null
+          stop_order: number
+        }
+        Insert: {
+          actual_delivery_time?: string | null
+          created_at?: string | null
+          cylinders_to_deliver: number
+          eta?: string | null
+          hospital_id: string
+          id?: string
+          route_id: string
+          status?: string | null
+          stop_order: number
+        }
+        Update: {
+          actual_delivery_time?: string | null
+          created_at?: string | null
+          cylinders_to_deliver?: number
+          eta?: string | null
+          hospital_id?: string
+          id?: string
+          route_id?: string
+          status?: string | null
+          stop_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "route_stops_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "route_stops_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      routes: {
+        Row: {
+          created_at: string | null
+          estimated_duration_hours: number | null
+          facility_id: string | null
+          id: string
+          route_date: string
+          route_name: string
+          status: string | null
+          total_cylinders: number | null
+          total_distance_km: number | null
+          truck_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          estimated_duration_hours?: number | null
+          facility_id?: string | null
+          id?: string
+          route_date?: string
+          route_name: string
+          status?: string | null
+          total_cylinders?: number | null
+          total_distance_km?: number | null
+          truck_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          estimated_duration_hours?: number | null
+          facility_id?: string | null
+          id?: string
+          route_date?: string
+          route_name?: string
+          status?: string | null
+          total_cylinders?: number | null
+          total_distance_km?: number | null
+          truck_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "routes_facility_id_fkey"
+            columns: ["facility_id"]
+            isOneToOne: false
+            referencedRelation: "facilities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "routes_truck_id_fkey"
+            columns: ["truck_id"]
+            isOneToOne: false
+            referencedRelation: "trucks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trucks: {
+        Row: {
+          assigned_facility_id: string | null
+          created_at: string | null
+          current_location: string | null
+          cylinder_capacity: number
+          driver_name: string
+          driver_phone: string | null
+          id: string
+          status: string | null
+          truck_code: string
+        }
+        Insert: {
+          assigned_facility_id?: string | null
+          created_at?: string | null
+          current_location?: string | null
+          cylinder_capacity?: number
+          driver_name: string
+          driver_phone?: string | null
+          id?: string
+          status?: string | null
+          truck_code: string
+        }
+        Update: {
+          assigned_facility_id?: string | null
+          created_at?: string | null
+          current_location?: string | null
+          cylinder_capacity?: number
+          driver_name?: string
+          driver_phone?: string | null
+          id?: string
+          status?: string | null
+          truck_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trucks_assigned_facility_id_fkey"
+            columns: ["assigned_facility_id"]
+            isOneToOne: false
+            referencedRelation: "facilities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
