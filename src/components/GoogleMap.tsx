@@ -1,5 +1,6 @@
 /// <reference types="google.maps" />
 import { useEffect, useRef, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 declare global {
   interface Window {
@@ -33,6 +34,15 @@ const MARKER_COLORS: Record<string, string> = {
 };
 
 let googleMapsPromise: Promise<void> | null = null;
+let cachedApiKey: string | null = null;
+
+async function fetchApiKey(): Promise<string> {
+  if (cachedApiKey) return cachedApiKey;
+  const { data, error } = await supabase.functions.invoke('get-maps-key');
+  if (error || !data?.key) throw new Error('Failed to fetch Maps API key');
+  cachedApiKey = data.key;
+  return data.key;
+}
 
 function loadGoogleMaps(apiKey: string): Promise<void> {
   if (googleMapsPromise) return googleMapsPromise;
@@ -52,7 +62,7 @@ function loadGoogleMaps(apiKey: string): Promise<void> {
 }
 
 export default function GoogleMap({
-  center = { lat: 10.8505, lng: 76.2711 }, // Kerala center
+  center = { lat: 10.8505, lng: 76.2711 },
   zoom = 8,
   markers = [],
   polylineEncoded,
@@ -66,18 +76,12 @@ export default function GoogleMap({
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
-
   useEffect(() => {
-    if (!apiKey) {
-      setError('Google Maps API key not configured');
-      return;
-    }
-
-    loadGoogleMaps(apiKey)
+    fetchApiKey()
+      .then((key) => loadGoogleMaps(key))
       .then(() => setLoaded(true))
-      .catch(() => setError('Failed to load Google Maps'));
-  }, [apiKey]);
+      .catch((e) => setError(e.message));
+  }, []);
 
   // Initialize map
   useEffect(() => {
@@ -103,7 +107,6 @@ export default function GoogleMap({
   useEffect(() => {
     if (!mapInstanceRef.current) return;
 
-    // Clear existing markers
     markersRef.current.forEach((m) => m.setMap(null));
     markersRef.current = [];
 
