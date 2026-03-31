@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface HospitalWithReading {
@@ -61,8 +61,9 @@ export function useHospitalsWithReadings() {
   useEffect(() => {
     fetchData();
 
+    const channelName = `o2-realtime-${Math.random().toString(36).slice(2)}`;
     const channel = supabase
-      .channel('o2-realtime')
+      .channel(channelName)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'o2_readings' }, () => {
         fetchData();
       })
@@ -90,8 +91,9 @@ export function useAlerts() {
   useEffect(() => {
     fetchAlerts();
 
+    const channelName = `alerts-realtime-${Math.random().toString(36).slice(2)}`;
     const channel = supabase
-      .channel('alerts-realtime')
+      .channel(channelName)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts' }, () => {
         fetchAlerts();
       })
